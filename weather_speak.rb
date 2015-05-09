@@ -41,16 +41,27 @@ def init
 		f.close
 	end
 
-	Configuration.set(api_key, zip_code)
+	Configuration.set(api_key.rstrip, zip_code.rstrip)
 end
 
 def main
 	init
 	base_uri = 'http://api.worldweatheronline.com/free/v2/weather.ashx?'
-	params = Hash.new
 
-	puts Configuration.get("api_key")
-	puts Configuration.get("zip_code")
+	params = Hash.new
+	params["key"] = Configuration.get("api_key")
+	params["q"] = Configuration.get("zip_code")
+
+	uri = base_uri
+	params.each_with_index do |(key, val), index|
+		if index == 0
+			uri += "#{key}=#{val}"
+		else
+			uri += "&#{key}=#{val}"
+		end
+	end
+
+	puts uri
 end
 
 main
