@@ -2,4 +2,4 @@
 source "https://rubygems.org"
 
 gem "espeak-ruby", require: "espeak"
-# gem "rails"
+gem "os", require: "os"

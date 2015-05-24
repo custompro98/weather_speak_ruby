@@ -4,9 +4,16 @@ require 'json'
 require 'open-uri'
 require 'pp'
 
-require 'espeak'
+require 'rubygems'
+require 'os'
 
-include ESpeak
+if OS.linux?
+	puts "Detected linux"
+	require 'espeak'
+	include ESpeak
+else
+	puts "Didn't include files"
+end
 
 class Configuration
 	@@config = {}
@@ -23,7 +30,7 @@ class Configuration
 end
 
 def init
-	config_path = ENV["HOME"] + "/.weatherspeak"
+	config_path = ENV["HOME"] + "/.config/weatherspeak"
 	if File.exist?(config_path)
 		f = File.open(config_path, "r")
 		api_key = f.gets
@@ -95,12 +102,15 @@ def main
 	wind_dir = direction[result["data"]["current_condition"][0]["winddir16Point"]]
 
 	output = "It feels like #{feels_like} degrees with humidity of #{humidity} percent.  The conditions are #{desc} and wind is traveling at #{wind_speed} miles per hour #{wind_dir}."
-	speech = Speech.new(output)
-	speech.speak
-	# `say #{output}`
+	if OS.linux?
+		speech = Speech.new(output)
+		speech.speak
+	elsif OS.mac?
+		puts "Detected Mac"
+		`say #{output}`
+	else
+		puts "Your OS is not supported at the moment."
+	end
 end
 
 main
-
-# test = "boop"
-# `say #{test}`

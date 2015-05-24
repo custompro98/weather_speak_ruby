@@ -1,0 +1,12 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    espeak-ruby (1.0.2)
+    os (0.9.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  espeak-ruby
+  os
